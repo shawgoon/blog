@@ -10,10 +10,11 @@ try
 } catch (PDOException $e){
   'Erreur :'.$e -> getMessage();
   $error = new Error ();
+  $error -> error($e);
   exit;
 }
   class Error {
-    private function error() {
+    private function error($e) {
       $error = fopen("error.txt", "a+");
       fwrite($error, $e -> getMessage());
       fclose($error);
