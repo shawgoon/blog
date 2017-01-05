@@ -2,7 +2,7 @@
 $user = "root";
 $mdp = "";
 $host = "localhost";
-$dbName = "blog";
+$dbName = "non";
 
 try
 {
