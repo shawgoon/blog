@@ -30,6 +30,7 @@ class Users {
     }
     return $instance;
   }
+
 // méthode d'inscription
   public function signup() {
     $instance = $this -> mypdo();
@@ -43,6 +44,21 @@ class Users {
         $this -> firstname,
         $this -> grad
         ));
+  }
+
+  // méthode de vérification de mail
+  public function checkMail() {
+    $instance = $this -> mypdo();
+    $sql = "SELECT * FROM users WHERE email= ?";
+    $result = $instance -> prepare($sql);
+    $result -> execute (array($_POST['mail']));
+    $data = $result -> fetch ();
+    if ($data != false) {
+      echo 'Vous êtes déjà inscrit avec ce mail';
+    } else {
+      $this -> signup();
+    }
+
   }
 
 // méthode de connection au site

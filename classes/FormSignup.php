@@ -12,7 +12,7 @@ class FormSignup {
         $name = ($_POST['name']);
         $firstname = ($_POST['firstname']);
         $signup = new Users($nickname, $mail, $password, $name, $firstname);
-        $signup -> signup();
+        $signup -> checkMail();
       }
       include ('./form/login.php');
     }
