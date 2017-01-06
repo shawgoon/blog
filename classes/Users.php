@@ -6,14 +6,15 @@ class Users {
   private $password = '';
   private $name = '';
   private $firstname = '';
-  private $grad = '0';
+  private $grad;
 
-  public function __construct($nickname, $mail, $password, $name, $firstname) {
+  public function __construct($nickname, $mail, $password, $name, $firstname, $grad = 0) {
     $this -> nickname = $nickname;
     $this -> mail = $mail;
     $this -> password = $password;
     $this -> name = $name;
     $this -> firstname = $firstname;
+    $this -> grad = $grad;
   }
 
 // méthode de connection à la BDD
@@ -29,43 +30,29 @@ class Users {
     }
     return $instance;
   }
-
 // méthode d'inscription
   public function signup() {
-    $this -> mypdo();
-    // if (isset($_POST['createUser'])) {
-    //   $nickname = ($_POST['userName']);
-    //   $email = ($_POST['email']);
-    //   $password = ($_POST['password']);
-    //   $name = ($_POST['name']);
-    //   $firstname = ($_POST['firstname']);
-
-      $sql = "INSERT INTO users (nickname, email, SHA1(password), name, firstname) VALUES (?, ?, ?, ?, ?)";
-      $createSuccess = $instance->prepare($sql);
-      $createSuccess -> execute(array($nickname, $email, $password, $name, $firstname));
-    // }
+    $instance = $this -> mypdo();
+      $sql = "INSERT INTO users (nickname, email, password, name, firstname, grad) VALUES (?, ?, SHA1(?), ?, ?, ?)";
+        $createSuccess = $instance->prepare($sql);
+        $createSuccess -> execute(array(
+        $this -> nickname,
+        $this -> mail,
+        $this -> password,
+        $this -> name,
+        $this -> firstname,
+        $this -> grad
+        ));
   }
 
 // méthode de connection au site
   public function login() {
-    $this -> mypdo();
-    $connected = false;
-    if (isset($_POST['nickname']) && isset($_POST['password'])) {
+    $instance = $this -> mypdo();
 
       $sql = "SELECT *
       FROM users
       WHERE nickname = '".$_POST['nickname']."'AND password = '".$_POST['password']."'";
       $user = $instance->query($sql)->fetch();
-
-      if ($user) {
-        $_SESSION['user'] = array(
-          "userName" => $user['nickname'],
-          "userId" => $user['id'],
-          "grad" => $user['grad']
-        );
-        $connected = true;
-      }
-    }
   }
 
 // méthode de déconnection du site
